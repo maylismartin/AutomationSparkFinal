@@ -2,3 +2,6 @@ terraform/gcp-key.json
 terraform/gcp-key.json
 .terraform/
 terraform/terraform.tfstate*
+terraform/gcp-key.json
+.terraform/
+terraform/terraform.tfstate*
