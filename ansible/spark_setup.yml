@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Mettre à jour les paquets
+      apt:
+        update_cache: yes
+
+    - name: Installer Java et utilitaires
+      apt:
+        name:
+          - openjdk-11-jdk
+          - wget
+          - tar
+        state: present
+
+    - name: Créer le dossier Spark
+      file:
+        path: /opt/spark
+        state: directory
+
+    - name: Télécharger Spark
+      get_url:
+        url: https://downloads.apache.org/spark/spark-3.5.7/spark-3.5.7-bin-hadoop3.tgz
+        dest: /tmp/spark.tgz
+
+    - name: Décompresser Spark
+      unarchive:
+        src: /tmp/spark.tgz
+        dest: /opt/spark
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+
+    - name: Ajouter Spark au PATH
+      lineinfile:
+        path: /etc/profile.d/spark.sh
+        line: 'export PATH=$PATH:/opt/spark/bin:/opt/spark/sbin'
+        create: yes
